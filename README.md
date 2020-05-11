@@ -19,8 +19,7 @@ ctypes
 <h2>Usage:</h2>
 When you have downloaded all necessary modules, the next step will be to open search_and_visualization module and launch it. You will be given two options: search or visualize, so chose whatever you need. You can always proceed if you want to learn something more. Press 'q' to exit the program. Also, when visualizing, write down all countries that you need to visualize and write 'next', then chose the macroeconomic index.
 <br />
-Here is an example of the program in work:
-<br />
+Here is an example of the program in work:<br />
 ![](program_example.jpg)
 
 <h2>Contribution:</h2>
