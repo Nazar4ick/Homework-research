@@ -157,7 +157,7 @@ def main():
     warning = 'Not all countries have data for specific years, ' \
               'so the graphics might be shifted when visualized.\n' \
               'When visualizing, type all countries you would like ' \
-              'to visualize and type "next"'
+              'to visualize one by one and type "next"'
     note = 'GDP is GDP per capita. Investment and manufacturing ' \
            'count as percent of GDP'
     print(intro)
