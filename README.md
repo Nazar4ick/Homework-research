@@ -9,7 +9,7 @@ To install this project download or clone all modules, and be sure that you have
 custom_array.py<br />
 country.py<br />
 countries_data.py<br />
-search_and_visualization.py<br />
+economic_analysis.py<br />
 The necessary libraries are:<br />
 json<br />
 urllib<br />
@@ -17,7 +17,7 @@ matplotlib<br />
 ctypes<br />
 
 <h2>Usage:</h2>
-When you have downloaded all necessary modules, the next step will be to open search_and_visualization module and launch it. You will be given two options: search or visualize, so chose whatever you need. You can always proceed if you want to learn something more. Press 'q' to exit the program. Also, when visualizing, write down all countries that you need to visualize and write 'next', then choose the macroeconomic index. For testing the program you can launch test_country module, which tests the Country class. It tests if it does correctly gather and save data.
+When you have downloaded all necessary modules, the next step will be to open economic_analysis module and launch it. You will be given two options: search or visualize, so chose whatever you need. You can always proceed if you want to learn something more. Press 'q' to exit the program. Also, when visualizing, write down all countries that you need to visualize and write 'next', then choose the macroeconomic index. For testing the program you can launch test_country module, which tests the Country class. It tests if it does correctly gather and save data.
 <br />
 
 Here is an example of the program in work:<br />
