@@ -1,5 +1,5 @@
 import unittest
-from economic_analysis.country import Country
+from country import Country
 
 
 class TestingCountries(unittest.TestCase):
