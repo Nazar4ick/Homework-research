@@ -18,8 +18,8 @@ class Country:
         """
         self.name = name
         self.gdp = None
-        self.foreign_investment_inflows = None
-        self.foreign_investment_outflows = None
+        self.investment_inflows = None
+        self.investment_outflows = None
         self.manufacturing = None
         self.min_indexes = {}
 
@@ -50,7 +50,7 @@ class Country:
         """
         data = self.read_url(url)
         base_search_index = int(data[-1][0][0:4])
-        self.min_indexes['GDP'] = base_search_index
+        self.min_indexes['gdp'] = base_search_index
         data = self.convert_to_array(data)
         self.gdp = data
         return None
@@ -63,9 +63,9 @@ class Country:
         """
         data = self.read_url(url)
         base_search_index = int(data[-1][0][0:4])
-        self.min_indexes['foreign_investment_inflows'] = base_search_index
+        self.min_indexes['investment_inflows'] = base_search_index
         data = self.convert_to_array(data)
-        self.foreign_investment_inflows = data
+        self.investment_inflows = data
         return None
 
     def get_investment_outflows(self, url):
@@ -76,9 +76,9 @@ class Country:
         """
         data = self.read_url(url)
         base_search_index = int(data[-1][0][0:4])
-        self.min_indexes['foreign_investment_outflows'] = base_search_index
+        self.min_indexes['investment_outflows'] = base_search_index
         data = self.convert_to_array(data)
-        self.foreign_investment_outflows = data
+        self.investment_outflows = data
         return None
 
     def get_manufacturing(self, url):
