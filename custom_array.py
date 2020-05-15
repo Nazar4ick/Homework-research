@@ -27,7 +27,8 @@ class Array:
         """
         returns the value with the specified index
         """
-        assert 0 <= index < len(self), "Array subscript out of range"
+        if type(index) == int:
+            assert 0 <= index < len(self), "Array subscript out of range"
         return self._elements[index]
 
     def __setitem__(self, index, value):
