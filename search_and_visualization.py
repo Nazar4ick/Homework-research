@@ -1,5 +1,6 @@
 import countries_data
 import matplotlib.pyplot as plt
+from custom_array import Array
 
 
 def get_countries():
@@ -44,6 +45,7 @@ def launch_search_system(countries, country_names):
                 searched = country
 
         # Move on to the info
+        max_year = 2018
         commands = ('gdp', 'investment_inflows', 'investment_outflows',
                     'manufacturing')
         print(commands)
@@ -53,21 +55,20 @@ def launch_search_system(countries, country_names):
         # find the desired command
         if command == 'gdp':
             info = searched.gdp
-            min_year = searched.min_indexes['GDP']
         elif command == 'investment_inflows':
-            info = searched.foreign_investment_inflows
-            min_year = searched.min_indexes['foreign_investment_inflows']
+            info = searched.investment_inflows
         elif command == 'investment_outflows':
-            info = searched.foreign_investment_outflows
-            min_year = searched.min_indexes['foreign_investment_outflows']
+            info = searched.investment_outflows
+            # there is no data for outflows further than 2013
+            max_year = 2013
         else:
             info = searched.manufacturing
-            min_year = searched.min_indexes['manufacturing']
 
         # Move on to the year
-        print(f'the minimal year is {min_year}, maximum: 2018')
+        min_year = searched.min_indexes[command]
+        print(f'the minimal year is {min_year}, maximum: {max_year}')
         year = 1
-        while not min_year <= year <= 2018:
+        while not min_year <= year <= max_year:
             year = input("What year's info are you looking for? ")
             while True:
                 try:
@@ -76,6 +77,9 @@ def launch_search_system(countries, country_names):
                 except ValueError:
                     year = input("What year's info are you looking for? ")
         # display the info
+        if command == 'manufacturing' and min_year < 1995:
+            # fix an error with index error
+            year -= 2
         print(info[year - min_year])
 
         # give an opportunity to learn something more
@@ -99,10 +103,10 @@ def get_requested_countries(countries, country_names):
     name = ''
     while name != 'next':
         name = input('What countries would you like to investigate?'
-                     ' (type next to proceed) ')
-        while name not in country_names and name != 'next':
+                     ' ("all" to add all, type "next" to proceed) ')
+        while name not in country_names and name != 'next' and name != 'all':
             name = input('What countries would you like to investigate?'
-                         ' (type next to proceed) ')
+                         ' ("all" to add all, type "next" to proceed) ')
         chosen_names.append(name)
 
     # add chosen countries
@@ -110,6 +114,9 @@ def get_requested_countries(countries, country_names):
         for country in countries:
             if name == country.name:
                 requested_countries.append(country)
+            elif name == 'all':
+                requested_countries = countries
+                break
 
     # ask what info would the user like to learn
     commands = ('gdp', 'investment_inflows', 'investment_outflows',
@@ -130,20 +137,65 @@ def visualize(countries, country_names):
     """
     countries_and_info = get_requested_countries(countries, country_names)
     countries, info = countries_and_info[0], countries_and_info[1]
+    year_info = get_max_base_year(countries, info)
+    base_year = year_info[0]
+    all_years = year_info[1]
+
     if info == 'gdp':
         for country in countries:
-            plt.plot(country.gdp, label=country.name)
+            slice_from = base_year - country.min_indexes[info]
+            plt.plot(all_years, country.gdp[slice_from:],
+                     label=country.name)
     elif info == 'investment_inflows':
         for country in countries:
-            plt.plot(country.foreign_investment_inflows, label=country.name)
+            slice_from = base_year - country.min_indexes[info]
+            plt.plot(all_years, country.investment_inflows[slice_from:],
+                     label=country.name)
     elif info == 'investment_outflows':
         for country in countries:
-            plt.plot(country.foreign_investment_outflows, label=country.name)
-    else:
+            slice_from = base_year - country.min_indexes[info]
+            # not all countries have info for 2014th year
+            plt.plot(all_years,
+                     country.investment_outflows[slice_from:2014 - base_year],
+                     label=country.name)
+    elif info == 'manufacturing':
         for country in countries:
-            plt.plot(country.manufacturing, label=country.name)
+            slice_from = base_year - country.min_indexes[info]
+            # some countries have different start years, but have
+            # the same amount of data, which causes an Error
+            # Lithuania is an exception
+            if slice_from >= 4 and country.name not in ('Lithuania', 'Latvia'):
+                slice_from = 4
+            elif len(all_years) != len(country.manufacturing[slice_from:]):
+                all_years = all_years[len(all_years) -
+                                      len(country.manufacturing[slice_from:]):]
+            plt.plot(all_years, country.manufacturing[slice_from:],
+                     label=country.name)
     plt.legend()
     plt.show()
+
+
+def get_max_base_year(countries, info):
+    """
+    gets the max base year, so that the graphics don't shift
+    and start from the same point
+    :param countries: lst
+    :param info: str
+    :return: int
+    """
+    base_years = []
+    max_year = 2018
+    if info == 'investment_outflows':
+        max_year = 2013
+    for country in countries:
+        base_years.append(country.min_indexes[info])
+    base_year = max(base_years)
+    # create an array, so there is no conflict when plotting
+    all_years = Array(max_year + 1 - base_year)
+    # get all years for the x axis
+    for i in range(len(all_years)):
+        all_years[i] = base_year + i
+    return base_year, all_years
 
 
 def main():
@@ -154,9 +206,7 @@ def main():
     intro = 'This program is designed to help you analyse ' \
             'economics of Ukraine or any other\ncountry in ' \
             'comparison to other countries with a similar model of economics'
-    warning = 'Not all countries have data for specific years, ' \
-              'so the graphics might be shifted when visualized.\n' \
-              'When visualizing, type all countries you would like ' \
+    warning = 'When visualizing, type all countries you would like ' \
               'to visualize one by one and type "next"'
     note = 'GDP is GDP per capita. Investment and manufacturing ' \
            'count as percent of GDP'
