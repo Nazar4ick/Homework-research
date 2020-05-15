@@ -1,4 +1,4 @@
-import countries_data as countries_data
+import countries_data
 import matplotlib.pyplot as plt
 from custom_array import Array
 
