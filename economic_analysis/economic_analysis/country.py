@@ -1,6 +1,6 @@
 import json
 import urllib.request
-from economic_analysis.custom_array import Array
+from custom_array import Array
 
 
 class Country:
