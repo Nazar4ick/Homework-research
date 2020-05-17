@@ -1,4 +1,4 @@
-from country import Country
+from economic_analysis.country import Country
 
 
 def get_ukraine():
