@@ -1,6 +1,6 @@
-import countries_data
+import economic_analysis.countries_data as countries_data
 import matplotlib.pyplot as plt
-from custom_array import Array
+from economic_analysis.custom_array import Array
 
 
 def get_countries():
